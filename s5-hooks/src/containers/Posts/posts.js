@@ -4,7 +4,7 @@ import SearchView from '../../components/SearchView/searchView';
 
 export default function Posts() {
     const [posts, setPosts] = useState([])
-    const [searchParam, setSearchParam] = useState([])
+    const [searchParam, setSearchParam] = useState('')
 
     const fetchPosts = () => {
         fetch('https://jsonplaceholder.typicode.com/posts')
@@ -18,9 +18,9 @@ export default function Posts() {
     // })
 
      //se executa doar la prima randare, la montarea componentei
-    useEffect(() => {
-        fetchPosts()
-    }, [])
+    // useEffect(() => {
+    //     fetchPosts()
+    // }, [])
 
     //se executa cand unul din elementele din [] se schimba (dependintele)
     // useEffect(() => {
@@ -57,7 +57,7 @@ export default function Posts() {
   return (
     <>
         <SearchView search={searchParam} setSearch={setSearchParam} />
-        <PostsView posts={posts} />
+        <PostsView posts={filteredPosts} />
     </>
   );
 }

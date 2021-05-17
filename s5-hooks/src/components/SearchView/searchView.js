@@ -28,8 +28,8 @@ export default function SearchView({search, setSearch}) {
             onChange={({target: {value}}) => setSearch(value)}
             value={search}
         />
-        {/* <SearchButton onClick={() => setSearch("")}/> */}
-        <SearchButton onCLick={onClick} />
+         {/* <SearchButton onClick={() => setSearch("")}/> */}
+        <SearchButton onClick={onClick} />
     </div>
   );
 }
