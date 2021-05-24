@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import {useComments} from '../../context/CommentsContext'
 
 export default function Comments({id}) {
-  const  [comments, setComments] = useState([])
-console.log('in comments')
-console.log(id)
-  const fetchComments = () =>
-      fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
-        .then((response) => response.json())
-        .then((data) => setComments(data));
 
+  const {comments, setComments, fetchComments} = useComments()
+
+console.log(id)
       
   useEffect(() => {
-    fetchComments()
-  }, [id])
+    fetchComments(id)
+  }, [])
 
 console.log(comments)
   return (
