@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Comments from '../Comments/comments'
+import {CommentsProvider} from '../../context/CommentsContext'
+
 
 export default function PostView({id, title, body, userId}) {
   const [showComments, setShowComments] = useState('false')
@@ -10,8 +12,7 @@ export default function PostView({id, title, body, userId}) {
         <h4>Title: {title}</h4>
         <p>Content: {body}</p>
         <button onClick={() => {setShowComments(!showComments)}}>Comments</button>
-        {(!showComments) ? <Comments  id={id}/> : null } 
-        {/* or {showComments && <Comments id={id} />} */}
+        {(!showComments) ? <CommentsProvider><Comments id={id} /></CommentsProvider> : null}
     </div>
   );
 }
