@@ -6,9 +6,9 @@ import {PostProvider} from './context/PostsContext'
 function App() {
   return (
     <div className="App">
-      <PostProvider>
-        <Home/>
-      </PostProvider>
+      
+      <Home/>
+      
     </div>
   );
 }
