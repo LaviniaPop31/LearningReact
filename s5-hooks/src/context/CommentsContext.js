@@ -1,32 +1,32 @@
-import React, {useState, useContext} from 'react'
+// import React, {useState, useContext} from 'react'
 
 
-const CommentsContext = React.createContext();
+// const CommentsContext = React.createContext();
 
-export function useComments() {
-    return useContext(CommentsContext)
-}
+// export function useComments() {
+//     return useContext(CommentsContext)
+// }
 
-export function CommentsProvider({ children}) {
-    const  [comments, setComments] = useState([])
+// export function CommentsProvider({ children}) {
+//     const  [comments, setComments] = useState([])
 
-    const fetchComments = (id) =>
-      fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
-        .then((response) => response.json())
-        .then((data) => setComments(data));
-
-
-const value = {
-    comments,
-    setComments,
-    fetchComments
-}
+//     const fetchComments = (id) =>
+//       fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
+//         .then((response) => response.json())
+//         .then((data) => setComments(data));
 
 
-return (
-    <CommentsContext.Provider value={value}>
-       {children}
-   </CommentsContext.Provider>
-)
+// const value = {
+//     comments,
+//     setComments,
+//     fetchComments
+// }
 
-}
+
+// return (
+//     <CommentsContext.Provider value={value}>
+//        {children}
+//    </CommentsContext.Provider>
+// )
+
+// }

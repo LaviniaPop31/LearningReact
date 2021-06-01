@@ -2,15 +2,25 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {useComments} from '../../context/CommentsContext'
 
-export default function Comments({id}) {
+import {connect} from 'react-redux';
+import {setComments} from '../../actions/comments'
 
-  const {comments, setComments, fetchComments} = useComments()
+export default function Comments(props) {
+  
+  const {id, comments} = props
+  //const {comments, setComments, fetchComments} = useComments()
 
 console.log(id)
+console.log(props)
+const fetchComments = () =>
+fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
+  .then((response) => response.json())
+  .then((data) => 
+    props.dispatchSetComments(data));
       
   useEffect(() => {
-    fetchComments(id)
-  }, [])
+    fetchComments()
+  }, [id])
 
 console.log(comments)
   return (
@@ -28,3 +38,15 @@ console.log(comments)
 }
 
 Comments.propTypes = {};
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    comments: state.comments.list
+  }
+}
+
+const mapDispatchToProps = {
+  dispatchSetComments: setComments
+}
+
+Comments = connect(mapStateToProps, mapDispatchToProps)(Comments)
