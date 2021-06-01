@@ -4,6 +4,7 @@ import Comments from '../Comments/comments'
 import {CommentsProvider} from '../../context/CommentsContext'
 
 
+
 export default function PostView({id, title, body, userId}) {
   const [showComments, setShowComments] = useState('false')
  
@@ -12,7 +13,7 @@ export default function PostView({id, title, body, userId}) {
         <h4>Title: {title}</h4>
         <p>Content: {body}</p>
         <button onClick={() => {setShowComments(!showComments)}}>Comments</button>
-        {(!showComments) ? <CommentsProvider><Comments id={id} /></CommentsProvider> : null}
+        {(!showComments) ? <Comments id={id} /> : null}
     </div>
   );
 }
