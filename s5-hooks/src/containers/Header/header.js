@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import appRoutes from '../../routes';
+import { Link } from 'react-router-dom';
 
-export default function Header({navigateTo}) {
+export default function Header({navigateTo, userPermissions}) {
   return (
     <header style={{
         display:'flex', 
@@ -14,11 +15,22 @@ export default function Header({navigateTo}) {
         >
         <span style={{marginLeft: 20, marginRight: 20}}>Header</span>
 
-        {appRoutes.map(({ path, title }) => (
-            <button key={path} onClick={navigateTo(path)}>{title}</button>
+        {appRoutes
+        .filter(({ noHeader }) => !noHeader)
+        .filter(
+          ({ permissions }) =>
+            permissions.some((permission) =>
+              userPermissions.includes(permission)
+            ) || permissions.length === 0
+        )
+        .map(({ path, title }) => (
+          <Link to={path}>{title}</Link>
         ))}
 
 
+        {/* {appRoutes.map(({ path, title }) => (
+            <button key={path} onClick={navigateTo(path)}>{title}</button>
+        ))} */}
 
         {/* <button onClick={navigateTo('/posts')}>Posts</button>
         <button onClick={navigateTo('/albums')}>Albums</button>

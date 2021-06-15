@@ -6,7 +6,7 @@ import Home from "./containers/Home/home"
 function App() {
   return (
     <div className="App">
-      <Home/>
+      <Home permissions={['READ_TODOS', 'ADMIN']}/>
     </div>
   );
 }

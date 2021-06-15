@@ -1,37 +1,54 @@
 import Albums from './containers/Albums/albums'
 import Posts from './containers/Posts/posts'
+import PostView from './components/PostView/postView'
 import Todos from './containers/Todos/todos'
 import { PostProvider } from './context/PostsContext'
 
 export const ALBUM_ROUTE = '/albums' 
+export const SINGLE_POST = "/posts/:id";
 
 const appRoutes = [
     {
       path: ALBUM_ROUTE,
-      title: 'Albums List',
+      title: 'Albums',
+      noHeader: false,
       permissions: ['READ_ALBUMS', 'ADMIN'],
-      render: () => <Albums />
+      exact: true,
+      render: (props) => <Albums {...props}/>
     },
     {
-        path: '/todos',
-        title: 'Todos List',
-        permissions: ['READ_TODOS', 'ADMIN'],
-        render: () => <Todos />
+      path: '/todos',
+      title: 'Todos',
+      noHeader: false,
+      permissions: ['READ_TODOS', 'ADMIN'],
+      exact: true,
+      render: (props) => <Todos {...props} />
     },
     {
       path: '/posts',
-      title: 'Posts List',
+      title: 'Posts',
+      noHeader: false,
       permissions: ['READ_POSTS', 'ADMIN'],
-      render: () => (
+      exact: true,
+      render: (props) => (
         <PostProvider>
-            <Posts />
+            <Posts {...props}/>
           </PostProvider>
       )
     },
     {
-        path: '/not-found',
-        title: 'Not found',
-        render: () => "Not found"
+      path: SINGLE_POST,
+      title: "Post view",
+      noHeader: true,
+      permissions: ["READ_POSTS", "ADMIN"],
+      render: (props) => <PostView {...props} newData />,
+    },
+    {
+      path: '',
+      title: 'Dashboard',
+      exact: true,
+      permissions: [],
+      render: () => "Dashboard"
     }
   ]
 
