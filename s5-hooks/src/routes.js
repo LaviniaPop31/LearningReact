@@ -1,11 +1,13 @@
 import Albums from './containers/Albums/albums'
 import Posts from './containers/Posts/posts'
 import PostView from './components/PostView/postView'
+import AlbumView from './containers/albumView/albumView'
 import Todos from './containers/Todos/todos'
 import { PostProvider } from './context/PostsContext'
 
 export const ALBUM_ROUTE = '/albums' 
 export const SINGLE_POST = "/posts/:id";
+export const SINGLE_ALBUM = "/albums/:id"
 
 const appRoutes = [
     {
@@ -42,6 +44,13 @@ const appRoutes = [
       noHeader: true,
       permissions: ["READ_POSTS", "ADMIN"],
       render: (props) => <PostView {...props} newData />,
+    },
+    {
+      path: SINGLE_ALBUM,
+      title: "Album view",
+      noHeader: true,
+      permissions: ["READ_POSTS", "ADMIN"],
+      render: (props) => <AlbumView {...props} newData />,
     },
     {
       path: '',
