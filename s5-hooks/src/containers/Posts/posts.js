@@ -1,76 +1,86 @@
-import React, {useEffect, useState, useMemo} from 'react'
-import PostsView from '../../components/PostsView/postsView';
-import SearchView from '../../components/SearchView/searchView';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import  { connect } from 'react-redux'
 
-import {usePosts} from '../../context/PostsContext'
+import PostsView from "../../components/PostsView/postsView";
+import SearchView from "../../components/SearchView/searchView";
 
-export default function Posts() {
-    // const [posts, setPosts] = useState([])
-    // const [searchParam, setSearchParam] = useState('')
-    const {posts, filteredPosts, searchParam, fetchPosts, setSearchParam} = usePosts() //putem folosi si useContext(PostsContext) - e acelasi lucru usePosts
+import { setPosts, setLoadingFlag } from '../../actions/posts';
+import { setError } from '../../actions/error';
 
-    // moved to context - fetchPosts
-    // const fetchPosts = () => {
-    //     fetch('https://jsonplaceholder.typicode.com/posts')
-    //     .then(response => response.json())
-    //     .then(data => setPosts(data))
-    // }
+let Posts = (props) => {
+  const { posts, error, isLoading } = props;
+  const [searchParam, setSearchParam] = useState("");
+console.log(props)
+  const fetchPosts = () => {
+    props.dispatchSetLoading(true);
+    fetch("https://jsonplaceholder.typicode.com/posts")
+        .then((response) => response.json())
+        .then((data) => {
+          props.dispatchSetPosts(data)
+          props.dispatchSetLoading(false);
 
-    // se executa de fiecare data cand se randeaza componenta
-    // useEffect(() => {
-    //  console.log('all states', searchParam)
-    // })
+          // simulare eroare
+          // setTimeout(() => {
+          //   props.dispatchSetError({
+          //     code: 400,
+          //     message: 'Eroare 400'
+          //   })
+          // }, 5000)
 
-     //se executa doar la prima randare, la montarea componentei
-    // useEffect(() => {
-    //     fetchPosts()
-    // }, [])
+        })
+  };
 
-    //se executa cand unul din elementele din [] se schimba (dependintele)
-    // useEffect(() => {
-    //   console.log(`some state: posts length: ${posts.length} search: ${searchParam}`)
-    // }, [posts, searchParam])
+  useEffect(() => {
 
+    if (!searchParam || !isLoading) {
+      fetchPosts();
+    }
+  }, [searchParam]);
 
-    //varianta 1
+  const filteredPosts = useMemo(() => {
+    if (!searchParam) {
+      return posts;
+    }
+    return posts.filter(({ body }) => body.includes(searchParam));
+  }, [searchParam, posts, !isLoading]);
 
-    // useEffect(() => {
-    //     if(!searchParam) {
-    //         fetchPosts()
-    //     } else {
-    //         const filteredPosts = posts.filter(({body}) => body.includes(searchParam))   // {body} = post.body - destructurare
-    //         setPosts(filteredPosts)
-    //     }
-    // }, [searchParam])
-
-    //varianta 2 cu useMemo
-    // useEffect(() => {
-    //     if(!searchParam) {
-    //         fetchPosts()
-    //     }
-    // }, [searchParam])
-
-    useEffect(() => {
-        fetchPosts()
-
-    }, [])
-
-    // daca las functia simpla fara useMemo, aceasta se va executa de fiecare data
-    // const filteredPosts = useMemo(() => {
-    //     if (!searchParam) {
-    //         return posts;
-    //     }
-    //     return posts.filter(({body}) => body.includes(searchParam))
-    // }, [searchParam, posts])
+  let renderPosts = <PostsView posts={filteredPosts} />;
+  if(isLoading) {
+    renderPosts = <div>Pagina se incarca!</div>
+  }
+  if(error?.message) {
+    renderPosts = <div>{error.message}</div>
+  }
 
   return (
     <>
-        <SearchView search={searchParam} setSearch={setSearchParam} />
-        <PostsView posts={filteredPosts} />
+      <SearchView search={searchParam} setSearch={setSearchParam} />
+      {renderPosts}
     </>
   );
 }
 
-Posts.propTypes = {
+Posts.propTypes = {};
 
+const mapStateToProps = (state, ownProps) => {
+  console.log({state})
+  // "state" - este state-ul aplicatiei (redux)
+  // ownProps - este props-urile componentei
+  // console.log({state, ownProps});
+  return {
+    posts: state.posts.list,
+    error: state.error,
+    isLoading: state.posts.loading,
+  }
 }
+
+const mapDispatchToProps = {
+  dispatchSetPosts: setPosts,
+  dispatchSetError: setError,
+  dispatchSetLoading: setLoadingFlag,
+}
+
+Posts = connect(mapStateToProps, mapDispatchToProps)(Posts)
+
+export default Posts
+
