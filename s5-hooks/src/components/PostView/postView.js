@@ -22,7 +22,7 @@ export default function PostView({id, title, body, userId, newData = false}) {
     .then((data) => setNewPost(data));
 
   useEffect(() => {
-    if(params?.idPost) {
+    if(params?.id) {
       fetchNewData();
     }
   }, [state?.title]);
